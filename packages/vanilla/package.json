@@ -1,0 +1,31 @@
+{
+  "name": "@soblend/animify",
+  "version": "1.0.0",
+  "description": "Advanced animation library for vanilla JavaScript and all frameworks",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest"
+  },
+  "keywords": ["animation", "motion", "vanilla", "javascript", "css", "web-animations"],
+  "author": "Soblend",
+  "license": "MIT",
+  "dependencies": {
+    "@soblend/animify-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "tsup": "^8.3.5",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@soblend/animify-vue",
+  "version": "1.0.0",
+  "description": "Vue bindings for Animify animation library",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest"
+  },
+  "keywords": ["vue", "animation", "motion", "composables"],
+  "author": "Soblend",
+  "license": "MIT",
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "dependencies": {
+    "@soblend/animify-core": "workspace:*"
+  },
+  "devDependencies": {
+    "vue": "^3.5.13",
+    "typescript": "^5.7.2",
+    "tsup": "^8.3.5",
+    "vitest": "^2.1.8"
+  }
+}

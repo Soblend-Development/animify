@@ -1,0 +1,2 @@
+'use strict';var animifyCore=require('@soblend/animify-core');Object.keys(animifyCore).forEach(function(k){if(k!=='default'&&!Object.prototype.hasOwnProperty.call(exports,k))Object.defineProperty(exports,k,{enumerable:true,get:function(){return animifyCore[k]}})});//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.js.map

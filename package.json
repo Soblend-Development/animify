@@ -1,0 +1,26 @@
+{
+  "name": "@soblend/animify-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Advanced animation library for all frameworks",
+  "scripts": {
+    "build": "pnpm --filter \"./packages/**\" build",
+    "dev": "pnpm --filter \"./packages/**\" dev",
+    "test": "pnpm --filter \"./packages/**\" test",
+    "clean": "rm -rf packages/*/dist packages/*/.turbo node_modules/.cache",
+    "publish:core": "cd packages/core && npm publish --access public",
+    "publish:vanilla": "cd packages/vanilla && npm publish --access public",
+    "publish:react": "cd packages/react && npm publish --access public",
+    "publish:vue": "cd packages/vue && npm publish --access public",
+    "publish:all": "pnpm run build && pnpm run publish:core && pnpm run publish:vanilla && pnpm run publish:react && pnpm run publish:vue"
+  },
+  "keywords": ["animation", "motion", "css", "javascript", "react", "vue", "nextjs"],
+  "author": "Soblend",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.13.11",
+    "typescript": "^5.7.2",
+    "tsup": "^8.3.5",
+    "vitest": "^2.1.8"
+  }
+}

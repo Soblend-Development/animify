@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animify - Demos Avanzados</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: white;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .demo-section {
+            margin-bottom: 4rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        .demo-section h2 {
+            margin-bottom: 1.5rem;
+            color: #667eea;
+        }
+        
+        /* Particle System Demo */
+        #particleCanvas {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        /* Card Stack Demo */
+        .card-stack {
+            perspective: 1000px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 200px;
+            height: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        /* Loading Animations */
+        .loader-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .loader-box {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #667eea;
+            border-radius: 50%;
+        }
+        .dots {
+            display: flex;
+            gap: 10px;
+        }
+        .dot {
+            width: 15px;
+            height: 15px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+        
+        /* Morphing Shapes */
+        #morphCanvas {
+            width: 100%;
+            height: 300px;
+        }
+        
+        .btn {
+            background: #667eea;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Animify - Demos Avanzados</h1>
+        
+        <!-- Sistema de Partículas -->
+        <div class="demo-section">
+            <h2>⚡ Sistema de Partículas Interactivo</h2>
+            <canvas id="particleCanvas"></canvas>
+            <p style="opacity: 0.7; margin-top: 10px;">Haz clic para crear partículas</p>
+        </div>
+        
+        <!-- Card Stack con 3D -->
+        <div class="demo-section">
+            <h2>🃏 Stack de Cartas 3D</h2>
+            <div class="card-stack" id="cardStack">
+                <div class="card">🎴</div>
+                <div class="card">🎭</div>
+                <div class="card">🎨</div>
+                <div class="card">🎪</div>
+            </div>
+            <button class="btn" onclick="shuffleCards()">Mezclar Cartas</button>
+        </div>
+        
+        <!-- Loaders Animados -->
+        <div class="demo-section">
+            <h2>⏳ Loaders Creativos</h2>
+            <div class="loader-grid">
+                <div class="loader-box">
+                    <div class="spinner" id="spinner1"></div>
+                </div>
+                <div class="loader-box">
+                    <div class="dots" id="dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+                <div class="loader-box">
+                    <div class="spinner" id="spinner2" style="border-radius: 10px;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SVG Morphing -->
+        <div class="demo-section">
+            <h2>🔄 Morphing de Formas SVG</h2>
+            <svg id="morphCanvas" viewBox="0 0 200 200">
+                <path id="morphPath" fill="#667eea" stroke="white" stroke-width="2"/>
+            </svg>
+            <button class="btn" onclick="morphShape()">Transformar Forma</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as Animify from '../packages/vanilla/dist/index.mjs';
+        window.Animify = Animify;
+
+        // Sistema de Partículas
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 5;
+                this.vy = (Math.random() - 0.5) * 5;
+                this.life = 1;
+                this.size = Math.random() * 5 + 2;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= 0.01;
+                this.vy += 0.1;
+            }
+            
+            draw() {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        let particles = [];
+        
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            for (let i = 0; i < 30; i++) {
+                particles.push(new Particle(x, y));
+            }
+        });
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        // Loaders
+        Animify.createAnimation(document.getElementById('spinner1'), [
+            { transform: 'rotate(0deg)' },
+            { transform: 'rotate(360deg)' }
+        ], { duration: 1000, iterations: Infinity, easing: 'linear' });
+        
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+            Animify.createAnimation(dot, [
+                { transform: 'translateY(0)' },
+                { transform: 'translateY(-20px)' },
+                { transform: 'translateY(0)' }
+            ], {
+                duration: 600,
+                iterations: Infinity,
+                delay: i * 200,
+                easing: Animify.Easing.easeInOutQuad
+            });
+        });
+        
+        Animify.createAnimation(document.getElementById('spinner2'), [
+            { transform: 'rotate(0deg) scale(1)' },
+            { transform: 'rotate(180deg) scale(1.2)' },
+            { transform: 'rotate(360deg) scale(1)' }
+        ], { duration: 1500, iterations: Infinity, easing: Animify.Easing.easeInOutCubic });
+        
+        // Card Stack
+        window.shuffleCards = () => {
+            const cards = document.querySelectorAll('.card');
+            const timeline = Animify.createTimeline();
+            
+            cards.forEach((card, i) => {
+                timeline.add({
+                    target: card,
+                    keyframes: [
+                        { transform: 'rotateY(0deg) translateX(0)' },
+                        { transform: `rotateY(180deg) translateX(${(i - 1.5) * 100}px)` },
+                        { transform: 'rotateY(360deg) translateX(0)' }
+                    ],
+                    options: { duration: 800, easing: Animify.Easing.easeInOutBack },
+                    offset: i * 100
+                });
+            });
+            
+            timeline.play();
+        };
+        
+        // SVG Morphing
+        const shapes = [
+            'M 50 100 L 150 100 L 100 50 Z',
+            'M 100 50 L 150 150 L 50 150 Z',
+            'M 75 75 L 125 75 L 125 125 L 75 125 Z',
+            'M 100 50 Q 150 100 100 150 Q 50 100 100 50 Z'
+        ];
+        let currentShape = 0;
+        
+        window.morphShape = () => {
+            const path = document.getElementById('morphPath');
+            currentShape = (currentShape + 1) % shapes.length;
+            path.setAttribute('d', shapes[currentShape]);
+        };
+        
+        document.getElementById('morphPath').setAttribute('d', shapes[0]);
+    </script>
+</body>
+</html>
